@@ -1,17 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="style.css">
     <title>I'm Céline</title>
 </head>
+
 <body>
     <header class="">
         <nav id="navMenu" class="">
-
             <ul class="hamburgerMenu">
                 <li>
                     <a id="openMenu"><i class="fa-solid fa-bars icons"></i></a>
@@ -20,9 +22,6 @@
                     <a id="closeMenu"><i class="fa-solid fa-xmark icons"></i></a>
                 </li>
             </ul>
-            <div class="logoImageContainer">
-                <img class="logoImage" src="img/profil_lutt_nobg_jpg.jpg" alt="picture of Celine">
-            </div>
             <ul class="navMenu">
                 <li class="nav-item">
                     <a class="nav-link" href="">Home</a>
@@ -31,56 +30,324 @@
                     <a class="nav-link" href="">About</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="">Gallery</a>
+                    <a class="nav-link" id="artGalleryLink" href="">Gallery</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="newPostLink" href="">New Post</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="">Contact</a>
                 </li>
             </ul>
         </nav>
+        <div class="logoImageContainer">
+            <img class="logoImage" src="img/profil_lutt_nobg_jpg.jpg" alt="picture of Celine">
+        </div>
 
     </header>
     <main>
-        <section>
 
+        <section id="gallerySection">
+            <h5 class="galleryTitle">Gallery</h5>
+            <div id="artPostsGallery" class="artPostsGallery">
+
+            </div>
         </section>
+
+        <section id="newPostSection" class="newPostSection">
+            <div class="container">
+                <div class="row d-flex justify-content-center mt-5">
+                    <div class="col-md-6">
+                        <h5 class="galleryTitle">Create Post</h5>
+                        <div class="myform">
+                            <div class="form-group">
+                                <label for="title">Title</label>
+                                <input type="text" class="form-control" id="title">
+                            </div>
+                            <div class="form-group">
+                                <label for="description">Description</label>
+                                <textarea class="form-control" id="description"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="price">Price</label>
+                                <input type="number" class="form-control" id="price">
+                            </div>
+                            <div class="form-group">
+                                <label class="imgFakeBtn btn btn-dark form-control" for="imgUrl">Upload Image</label>
+                                <input type="file" id="imgUrl" class="form-control" name="imgUrl" accept="image/*">
+                                <input id="createNewPost" class="form-control  btn btn-dark" value="Send" type="submit">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="editPostSection">
+            <div class="container">
+                <div class="row d-flex justify-content-center mt-5">
+                    <div class="col-md-6">
+                        <h5 class="galleryTitle">Edit Post</h5>
+                        <div class="myform">
+                            <input id="id" type="hidden">
+                            <div class="form-group">
+                                <label for="editTitle">Title</label>
+                                <input type="text" class="form-control" id="editTitle">
+                            </div>
+                            <div class="form-group">
+                                <label for="editDescription">Description</label>
+                                <textarea class="form-control" id="editDescription"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="editPrice">Price</label>
+                                <input type="number" class="form-control" id="editPrice">
+                            </div>
+                            <div class="previewImage">
+                                <img id="editImage" src="" alt="preview">
+                            </div>
+                            <div class="form-group">
+                                <label class="imgFakeBtn btn btn-dark form-control" for="editImgUrl">Change Image</label>
+                                <input type="file" id="editImgUrl" class="form-control" name="editImgUrl" accept="image/*">
+                                <input id="submitEditPost" class="form-control  btn btn-dark" value="Send" type="submit">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
     </main>
     <footer>
-
+        <!-- <div>
+            <i class="fa-brands fa-instagram"></i>
+        </div>
+        <div>
+            <i class="fa-brands fa-facebook-f"></i>
+        </div> -->
     </footer>
-    <script type="text/javascript">
-        const openMenu = document.getElementById('openMenu');
-        const closeMenu = document.getElementById('closeMenu');
-        const navMenu = document.querySelector('.navMenu');
 
-        openMenu.addEventListener("click",  () => {
-            openMenu.style.display = 'none';
-            closeMenu.style.display = 'block';
-            navMenu.classList.toggle('active');
+<script type="text/javascript">
+const baseApi = "https://localhost:7073/api/ArtPiece";
+const openMenu = document.getElementById('openMenu');
+const closeMenu = document.getElementById('closeMenu');
+const navMenu = document.querySelector('.navMenu');
+
+const title = document.getElementById("title");
+const description = document.getElementById("description");
+const created = document.getElementById("created");
+const price = document.getElementById("price");
+const imgUrl = document.getElementById("imgUrl");
+
+const editId = document.getElementById("id");
+const editTitle = document.getElementById("editTitle");
+const editDescription = document.getElementById("editDescription");
+const editPrice = document.getElementById("editPrice");
+const editImgUrl = document.getElementById("editImgUrl");
+const editImage = document.getElementById("editImage");
+
+const artPostsGallery = document.getElementById('artPostsGallery');
+
+const gallerySection = document.getElementById('gallerySection');
+const newPostSection = document.getElementById('newPostSection');
+const editPostSection = document.getElementById('editPostSection');
+
+
+openMenu.addEventListener("click", () => {
+    openMenu.style.display = 'none';
+    closeMenu.style.display = 'block';
+    navMenu.classList.toggle('active');
+});
+
+closeMenu.addEventListener("click", () => {
+    closeMenu.style.display = 'none';
+    openMenu.style.display = 'inline-block';
+    navMenu.classList.toggle('active');
+});
+
+window.onscroll = () => {
+    openMenu.style.display = null;
+    closeMenu.style.display = null;
+    navMenu.classList.remove("active");
+}
+
+createNewPost.addEventListener("click", () => {
+    createArtPiece();
+});
+
+submitEditPost.addEventListener("click", () => {
+    editArtPiece();
+});
+
+newPostLink.addEventListener("click", () => {
+    showSection('newPostSection');
+    navMenu.classList.remove("active");
+});
+
+artGalleryLink.addEventListener("click", () => {
+    showSection('gallerySection');
+    navMenu.classList.remove("active");
+});
+
+function showSection(sectionsId) {
+    if (sectionsId == 'gallerySection') {
+        gallerySection.style.display = "block";
+        newPostSection.style.display = "none";
+        editPostSection.style.display = "none";
+    }
+    else if (sectionsId == 'newPostSection') {
+        editPostSection.style.display = "none";
+        gallerySection.style.display = "none";
+        newPostSection.style.display = "block";
+    }
+    else if (sectionsId == 'editPostSection') {
+        editPostSection.style.display = "block";
+        gallerySection.style.display = "none";
+        newPostSection.style.display = "none";
+    }
+}
+
+class ArtPiece {
+    constructor(id, title, created, description, price, imgUrl) {
+        id = id;
+        title = title;
+        description = description;
+        created = created;
+        price = price;
+        imgUrl = imgUrl;
+    }
+}
+
+function createArtPiece() {
+    const formdata = new FormData();
+    formdata.append("title", title.value);
+    formdata.append("description", description.value);
+    formdata.append("price", price.value);
+    formdata.append("imgUrl", imgUrl.files[0]);
+
+    fetch("https://localhost:7073/Art/Create", {
+        method: "POST",
+        headers: {},
+        body: formdata,
+    })
+        .then(response => response.json())
+        .then((data) => {
+            loadGallery();
+            showSection('gallerySection')
+            });
+}
+
+function editArtPiece() {
+    const formdata = new FormData();
+    formdata.append("id", editId.value);
+    formdata.append("title", editTitle.value);
+    formdata.append("description", editDescription.value);
+    formdata.append("price", editPrice.value);
+    formdata.append("imgUrl", editImgUrl.files[0]);
+
+    fetch("https://localhost:7073/Art/Update", {
+        method: "POST",
+        headers: {},
+        body: formdata,
+    })
+        .then((data) => {
+            loadGallery();
+            showSection('gallerySection')
+            });
+}
+
+function fillEditForm(id, title, description, price ,imgUrl) {
+    editId.value = id;
+  editTitle.value = title;
+  editDescription.value = description;
+  editPrice.value = price;
+  editImage.src = "https://localhost:7073/UploadedPics/"+ imgUrl;
+  showSection("editPostSection");
+}
+
+function deleteArtPost(id) {
+    fetch("https://localhost:7073/api/ArtPiece/" + id, {
+        method: "DELETE",
+        headers: {"Content-Type": "application/json"}
+    })
+    .then(data => {
+        loadGallery();
+    })
+}
+
+// LADDAR UPP CARDS
+function loadGallery() {
+    let output = "";
+fetch(baseApi, {
+    headers: {
+        "Content-Type": "application/json"
+    }
+})
+    .then(res => res.json())
+    .then(data => {
+        data.forEach(post => {
+            output += `
+            <div class="card" style="width: 22rem;">
+                    <img src="https://localhost:7073/UploadedPics/${post.imgUrl}" class="card-img" alt="Art Photo" style="width:100%">
+                <div class="card-body">
+                    <h5 class="card-title">${post.title}</h5>
+                    <button class="btn trash" onclick="deleteArtPost(${post.id})" ><i class="fa-solid fa-trash-can"></i></button>
+                    <button class="btn edit" onclick="fillEditForm(${post.id}, '${post.title}', '${post.description}', '${post.price}', '${post.imgUrl}')"><i class="fa-regular fa-pen-to-square"></i></button>
+                </div>
+            </div>
+    `;
+        })
+        artPostsGallery.innerHTML = output;
+    });
+}
+
+loadGallery();
+showSection('galllerySection');
+
+
+//---------------------------------------  // NOT IN USE !!! ----------------------------------------------
+    function renderArtPiece(post) {
+    //let jsCall = `fillEditForm(${player.id})`;
+    let card = `<div class="card">
+                    <img src="${card.imgUrl}" alt="Denim Jeans" style="width:100%">
+                    <h1>${card.title}</h1>  
+                </div>`;
+    artPostsGallery.innerHTML = artPostsGallery.innerHTML + card;
+}
+function createCard() {
+    artPostsGallery.innerHTML = "";
+    posts.forEach((post) => {
+        renderArtPiece(post);
+    });
+}
+
+
+async function refreshArtPosts() {
+    posts = [];
+    return fetch(baseApi)
+        .then((response) => response.json())
+        .then((array) => {
+            array.forEach((post) => {
+                p = new ArtPiece(
+                    post.title,
+                    post.imgUrl
+                );
+                posts.push(p);
+            });
+            console.log(posts)
         });
+}
 
-        closeMenu.addEventListener("click",  () => {
-            closeMenu.style.display = 'none';
-            openMenu.style.display = 'inline-block';
-            navMenu.classList.toggle('active');
-        });
-
-        window.onscroll = () =>{
-            openMenu.style.display = null;
-            closeMenu.style.display = null;
-            navMenu.classList.remove("active");    
-        }
-
-        // function myOpenFunction(){
-        //     var navbar = document.getElementById('navMenu');
-        //     navbar.classList.toggle('show');
-        // }
-
-
-    </script>
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-<script src="https://kit.fontawesome.com/84249f9e85.js" crossorigin="anonymous"></script>
+</script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/84249f9e85.js" crossorigin="anonymous"></script>
 </body>
+
 </html>
